@@ -1,10 +1,4 @@
-# Objective-C-Coding-Guidelines-In-Chinese
-[杏仁医生](https://www.xingren.com) Objective-C 编码规范。
-
-另外有一份 [CodeReview 指南](./CodeReview.md)
-
-转载请注明出处。
-
+# Objective-C编码规范
 ## 概要
 
 Objective-C 是一门面向对象的动态编程语言，主要用于编写iOS和Mac应用程序。关于 Objective-C 的编码规范，苹果和谷歌都已经有很好的总结：
@@ -12,13 +6,11 @@ Objective-C 是一门面向对象的动态编程语言，主要用于编写iOS�
 *	[Apple Coding Guidelines for Cocoa](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html)
 *	[Google Objective-C Style Guide](https://google-styleguide.googlecode.com/svn/trunk/objcguide.xml?showone=Line_Length#Line_Length)
 
-本文主要整合了对上述文档的翻译、作者自己的编程经验和其他的相关资料，为公司总结出一份通用的编码规范。
-
 ## 代码格式
 
 ### 使用空格而不是制表符 Tab
 
-不要在工程里使用 Tab，使用空格来进行缩进。在 `Xcode > Preferences > Text Editing` 将 Tab 和自动缩进都设置为**4**个空格。（_Google 的标准是使用两个空格来缩进，但这里还是推荐使用 Xcode 默认的设置。_）
+不要在工程里使用 Tab，使用空格来进行缩进。在 `Xcode > Preferences > Text Editing` 将 Tab 和自动缩进都设置为**4**个空格。（Google 的标准是使用两个空格来缩进，但这里还是推荐使用 Xcode 默认的设置。）
 
 ### 每一行的最大长度
 
@@ -28,17 +20,18 @@ Objective-C 是一门面向对象的动态编程语言，主要用于编写iOS�
 
 一个典型的 Objective-C 函数应该是这样的：
 
-```objective-c
+```
 - (void)writeVideoFrameWithData:(NSData *)frameData timeStamp:(int)timeStamp {
     ...
 }
 ```
 
 在 `-` 和 `(void)` 之间应该有一个空格，第一个大括号 `{` 的位置在函数所在行的末尾，同样应该有一个空格。
+**类方法和此类似。**
 
 如果一个函数有特别多的参数或者名称很长，应该将其按照`:`来对齐分行显示：
 
-```objective-c
+```
 - (id)initWithModel:(IPCModle)model
        ConnectType:(IPCConnectType)connectType
         Resolution:(IPCResolution)resolution
@@ -54,7 +47,7 @@ Objective-C 是一门面向对象的动态编程语言，主要用于编写iOS�
 
 在分行时，如果第一段名称过短，后续名称可以以 Tab 的长度（4个空格）为单位进行缩进：
 
-```objective-c
+```
 - (void)short:(GTMFoo *)theFoo
         longKeyword:(NSRect)theRect
   evenLongerKeyword:(float)theInterval
@@ -68,17 +61,7 @@ Objective-C 是一门面向对象的动态编程语言，主要用于编写iOS�
 
 将带有分支的代码（`if`, `else`, `switch`, `while` 等等）和上一个分支的结束括号（`)`, `}`），以及自己分支的开始括号（`(`, `{`）放在同一行，来保证代码的紧凑可读。
 
-```objective-c
-
-// 不推荐
-if (user.isHappy)
-{
-    // ...
-}
-else 
-{
-    // ...
-}
+```
 
 // 推荐
 if (something) {
@@ -94,13 +77,25 @@ if (something) {
   // ...
 }];
 
+
+// 不推荐
+if (user.isHappy)
+{
+    // ...
+}
+else 
+{
+    // ...
+}
+
+
 ```
 
 ### 函数调用
 
 函数调用的格式和书写差不多，可以按照函数的长短来选择写在一行或者分成多行：
 
-```objective-c
+```
 // 写在一行
 [myObject doFooWith:arg1 name:arg2 error:arg3];
 
@@ -118,7 +113,7 @@ if (something) {
 
 以下写法是错误的：
 
-```objective-c
+```
 //错误，要么写在一行，要么全部分行
 [myObject doFooWith:arg1 name:arg2
               error:arg3];
@@ -131,31 +126,15 @@ if (something) {
           error:arg3];
 ```
 
-### @public 和 @private 标记符
-
-@public 和 @private 标记符应该以**一个空格**来进行缩进：
-
-```objective-c
-@interface MyClass : NSObject {
- @public
-  ...
- @private
-  ...
-}
-@end
-```
-
 ### 协议（Protocols）
 
 在书写协议的时候注意用 `<>` 括起来的协议和类型名之间是没有空格的，比如 `IPCConnectHandler()<IPCPreconnectorDelegate>`,这个规则适用所有书写协议的地方，包括函数声明、类声明、实例变量等等：
 
-```objective-c
+```
 @interface MyProtocoledClass : NSObject<NSWindowDelegate> {
- @private
-    id<MyFancyDelegate> _delegate;
+
 }
 
-- (void)setDelegate:(id<MyFancyDelegate>)aDelegate;
 @end
 ```
 
@@ -169,7 +148,7 @@ if (something) {
 - 如果 block 过于庞大，应该单独声明成一个变量来使用。
 - `^` 和 `(` 之间，`^` 和 `{` 之间都没有空格，参数列表的右括号 `)` 和 `{` 之间有一个空格。
 
-```objective-c
+```
 // 较短的block写在一行内
 [operation setCompletionBlock:^{ [self onOperationDone]; }];
 
@@ -229,7 +208,7 @@ void (^largeBlock)(void) = ^{
 
 如果构造代码写在一行，需要在括号两端留有一个空格，使得被构造的元素于与构造语法区分开来：
 
-```objective-c
+```
 // 正确，在语法糖的"[]"或者"{}"两端留有空格
 NSArray *array = @[ [foo description], @"Another String", [bar description] ];
 NSDictionary *dic = @{ NSForegroundColorAttributeName : [NSColor redColor] };
@@ -241,7 +220,7 @@ NSDictionary* dic = @{NSForegroundColorAttributeName: [NSColor redColor]};
 
 如果构造代码不写在一行内，构造元素需要使用**两个空格**来进行缩进，右括号 `]` 或者 `}`写在新的一行，并且与调用语法糖那行代码的第一个非空字符对齐：
 
-```objective-c
+```
 NSArray *array = @[
   @"This",
   @"is",
@@ -255,9 +234,11 @@ NSDictionary *dictionary = @{
 };
 ```
 
-构造字典时，字典的Key和Value与中间的冒号`:`都要留有一个空格，多行书写时，也可以将Value对齐：
+构造字典时，字典的Key和Value与中间的冒号`:`都要留有一个空格，比如{ K : V }。
+当然对于大多数写习惯了函数的情况,使用 { K: V }也是可以的,目的是为了和编写Swift的代码风格接近。
+多行书写时，也可以将Value对齐：
 
-```objective-c
+```
 // 正确，冒号':'前后留有一个空格
 NSDictionary *option1 = @{
   NSFontAttributeName : [NSFont fontWithName:@"Helvetica-Bold" size:12],
@@ -295,7 +276,7 @@ NSDictionary *stillWrong = @{
 
 命名应该尽可能的清晰和简洁，但在 Objective-C 中，清晰比简洁更重要。由于 Xcode 强大的自动补全功能，我们不必担心名称过长的问题。
 
-```objective-c
+```
 // 清晰
 insertObject:atIndex:
 
@@ -310,7 +291,8 @@ remove:
 ```
 
 不要使用单词的简写，拼写出完整的单词：
-```objective-c
+
+```
 // 清晰
 destinationSelection
 setBackgroundColor:
@@ -319,9 +301,10 @@ setBackgroundColor:
 destSel
 setBkgdColor:
 ```
+
 然而，有部分单词简写在 Objective-C 编码过程中是非常常用的，以至于成为了一种规范，这些简写可以在代码中直接使用，下面列举了部分：
 
-```objective-c
+```
 alloc   == Allocate         max    == Maximum
 alt     == Alternate        min    == Minimum
 app     == Application      msg    == Message
@@ -336,7 +319,7 @@ int     == Integer
 
 命名方法或者函数时要避免歧义
 
-```objective-c
+```
 // 有歧义，是返回sendPort还是send一个Port？
 sendPort
 
@@ -352,7 +335,7 @@ displayName
 
 总是使用英语命名变量而不是拼音甚至中文：
 
-```objective-c
+```
 // 正确，表示诊疗记录
 medicalRecord
 
@@ -370,9 +353,9 @@ zhengLiaoJiLu
 
 - 命名前缀的时候不要和苹果 SDK 框架冲突。
 
-```objective-c
-// 使用 XR（杏仁首字母）前缀，表示 App 业务模块的组件
-@interface XRPhotoAssetsViewController : KCFViewController
+```
+// 使用 自定义的命名前缀（这里使用DS为例子），表示 App 业务模块的组件
+@interface DSPhotoAssetsViewController : KCFViewController
 
 // ...
 @end
@@ -382,19 +365,19 @@ zhengLiaoJiLu
 
 类名以大写字母开头，应该包含一个*名词*来表示它代表的对象类型，同时可以加上必要的前缀，比如 `NSString`, `NSDate`, `NSScanner`, `NSApplication` 等等：
 
-```objective-c
+```
 // 使用一个名词（player）来命名类
-@interface XRVideoPlayer : NSObject
+@interface DSVideoPlayer : NSObject
 ...
 @end
 ```
 
 而协议名称应该清晰地表示它所执行的行为，而且要和类名区别开来，所以通常使用 `ing` 词尾来命名一个协议，比如 `NSCopying`, `NSLocking`：
 
-```objective-c
+```
 
 // 使用 ing 结尾的动词来命名表示行为的协议
-@protocol XRVersionUpdateProtocol <NSObject>
+@protocol DSVersionUpdateProtocol <NSObject>
 ...
 @end
 ```
@@ -424,7 +407,7 @@ Objective-C的方法名通常都比较长，这是为了让程序有更好地可
 
 如果方法表示让对象执行一个动作，使用动词打头来命名，注意不要使用 `do`，`does` 这种多余的关键字，动词本身的暗示就足够了：
 
-```objective-c
+```
 // 动词打头的方法表示让对象执行一个动作
 - (void)invokeWithTarget:(id)target;
 - (void)selectTabViewItem:(NSTabViewItem *)tabViewItem;
@@ -432,7 +415,7 @@ Objective-C的方法名通常都比较长，这是为了让程序有更好地可
 
 如果方法是为了获取对象的一个属性值，直接用属性名称来命名这个方法，注意不要添加 `get` 或者其他的动词前缀：
 
-```objective-c
+```
 // 正确，使用属性名来命名方法
 - (NSSize)cellSize;
 
@@ -443,7 +426,7 @@ Objective-C的方法名通常都比较长，这是为了让程序有更好地可
 
 对于有多个参数的方法，务必在每一个参数前都添加关键词，关键词应当清晰说明参数的作用：
 
-```objective-c
+```
 // 正确，保证每个参数都有关键词修饰
 - (void)sendAction:(SEL)aSelector toObject:(id)anObject forAllCells:(BOOL)flag;
 
@@ -459,7 +442,7 @@ Objective-C的方法名通常都比较长，这是为了让程序有更好地可
 
 不要用 `and` 来连接两个参数，通常 `and` 用来表示方法执行了两个相对独立的操作（*从设计上来说，这时候应该拆分成两个独立的方法*）：
 
-```objective-c
+```
 // 错误，不要使用"and"来连接参数
 - (int)runModalForDirectory:(NSString *)path andFile:(NSString *)name andTypes:(NSArray *)fileTypes;
 
@@ -474,7 +457,7 @@ Objective-C的方法名通常都比较长，这是为了让程序有更好地可
 
 下面列举了一些常用参数名：
 
-```objective-c
+```
 ...action:(SEL)aSelector
 ...alignment:(int)mode
 ...atIndex:(int)index
@@ -497,31 +480,31 @@ Objective-C的方法名通常都比较长，这是为了让程序有更好地可
 
 存取方法是指用来获取和设置类属性值的方法，属性的不同类型，对应着不同的存取方法规范：
 
-```objective-c
+```
 // 属性是一个名词时的存取方法范式
 - (type)noun;
 - (void)setNoun:(type)aNoun;
-// 栗子
+// 例子
 - (NSString *)title;
 - (void)setTitle:(NSString *)aTitle;
 
 // 属性是一个形容词时存取方法的范式
 - (BOOL)isAdjective;
 - (void)setAdjective:(BOOL)flag;
-// 栗子
+// 例子
 - (BOOL)isEditable;
 - (void)setEditable:(BOOL)flag;
 
 // 属性是一个动词时存取方法的范式
 - (BOOL)verbObject;
 - (void)setVerbObject:(BOOL)flag;
-// 栗子
+// 例子
 - (BOOL)showsAlpha;
 - (void)setShowsAlpha:(BOOL)flag;
 ```
 
 命名存取方法时不要将动词转化为被动形式来使用：
-```objective-c
+```
 // 正确
 - (void)setAcceptsGlyphInfo:(BOOL)flag;
 - (BOOL)acceptsGlyphInfo;
@@ -532,7 +515,8 @@ Objective-C的方法名通常都比较长，这是为了让程序有更好地可
 ```
 
 可以使用 `can`, `should`, `will` 等词来协助表达存取方法的意思，但不要使用 `do`,和 `does`：
-```objective-c
+
+```
 // 正确
 - (void)setCanHide:(BOOL)flag;
 - (BOOL)canHide;
@@ -545,7 +529,8 @@ Objective-C的方法名通常都比较长，这是为了让程序有更好地可
 ```
 
 为什么 Objective-C 中不适用 `get` 前缀来表示属性获取方法？因为 `get`在Objective-C中通常只用来表示从函数指针返回值的函数：
-```objective-c
+
+```
 // 三个参数都是作为函数的返回值来使用的，这样的函数名可以使用"get"前缀
 - (void)getLineDash:(float *)pattern count:(int *)count phase:(float *)phase;
 ```
@@ -555,7 +540,8 @@ Objective-C的方法名通常都比较长，这是为了让程序有更好地可
 当特定的事件发生时，对象会触发它注册的委托方法。委托是Objective-C中常用的传递消息的方式。委托有它固定的命名范式。
 
 一个委托方法的第一个参数是触发它的对象，第一个关键词是触发对象的类名，除非委托方法只有一个名为`sender`的参数：
-```objective-c
+
+```
 // 第一个关键词为触发委托的类名
 - (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(int)row;
 - (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename;
@@ -565,7 +551,8 @@ Objective-C的方法名通常都比较长，这是为了让程序有更好地可
 ```
 
 根据委托方法触发的时机和目的，使用 `should`, `will`, `did` 等关键词
-```objective-c
+
+```
 - (void)browserDidScroll:(NSBrowser *)sender;
 
 - (NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)window;、
@@ -577,13 +564,13 @@ Objective-C的方法名通常都比较长，这是为了让程序有更好地可
 
 有些对象管理着一系列其它对象或者元素的集合，需要使用类似“增删查改”的方法来对集合进行操作，这些方法的命名范式一般为：
 
-```objective-c
+```
 // 集合操作范式
 - (void)addElement:(elementType)anObj;
 - (void)removeElement:(elementType)anObj;
 - (NSArray *)elements;
 
-// 栗子
+// 例子
 - (void)addLayoutManager:(NSLayoutManager *)obj;
 - (void)removeLayoutManager:(NSLayoutManager *)obj;
 - (NSArray *)layoutManagers;
@@ -591,7 +578,7 @@ Objective-C的方法名通常都比较长，这是为了让程序有更好地可
 
 注意，如果返回的集合是无序的，使用 `NSSet` 来代替 `NSArray`。如果需要将元素插入到特定的位置，使用类似于这样的命名：
 
-```objective-c
+```
 - (void)insertLayoutManager:(NSLayoutManager *)obj atIndex:(int)index;
 - (void)removeLayoutManagerAtIndex:(int)index;
 ```
@@ -600,7 +587,7 @@ Objective-C的方法名通常都比较长，这是为了让程序有更好地可
 
 下面是SDK中 `NSWindow` 类的集合操作方法：
 
-```objective-c
+```
 - (void)addChildWindow:(NSWindow *)childWin ordered:(NSWindowOrderingMode)place;
 - (void)removeChildWindow:(NSWindow *)childWin;
 - (NSArray *)childWindows;
@@ -619,27 +606,27 @@ Objective-C的方法名通常都比较长，这是为了让程序有更好地可
 
 函数名的第一个单词通常是一个动词，表示方法执行的操作：
 
-```objective-c
+```
 NSHighlightRect
 NSDeallocateObject
 ```
 
 如果函数返回其参数的某个属性，省略动词：
 
-```objective-c
+```
 unsigned int NSEventMaskFromType(NSEventType type)
 float NSHeight(NSRect aRect)
 ```
 
 如果函数通过指针参数来返回值，需要在函数名中使用 `Get`：
 
-```objective-c
+```
 const char *NSGetSizeAndAlignment(const char *typePtr, unsigned int *sizep, unsigned int *alignp)
 ```
 
 函数的返回类型是BOOL时的命名：
 
-```objective-c
+```
 BOOL NSDecimalIsNotANumber(const NSDecimal *decimal)
 ```
 
@@ -647,7 +634,7 @@ BOOL NSDecimalIsNotANumber(const NSDecimal *decimal)
 
 属性和对象的存取方法相关联，属性的第一个字母小写，后续单词首字母大写，不必添加前缀。属性按功能命名成名词或者动词：
 
-```objective-c
+```
 // 名词属性
 @property (strong) NSString *title;
 
@@ -657,13 +644,13 @@ BOOL NSDecimalIsNotANumber(const NSDecimal *decimal)
 
 属性也可以命名成形容词，这时候通常会指定一个带有 `is` 前缀的 get 方法来提高可读性：
 
-```objective-c
+```
 @property (assign, getter=isEditable) BOOL editable;
 ```
 
 命名实例变量，在变量名前加上`_`前缀（*有些有历史的代码会将`_`放在后面*），其它和命名属性一样：
 
-```objective-c
+```
 @implementation MyClass {
     BOOL _showsTitle;
 }
@@ -679,7 +666,7 @@ BOOL NSDecimalIsNotANumber(const NSDecimal *decimal)
 如果要定义一组相关的常量，尽量使用枚举类型（enumerations），枚举类型的命名规则和函数的命名规则相同。
 建议使用 `NS_ENUM` 和 `NS_OPTIONS` 宏来定义枚举类型，参见官方的 [Adopting Modern Objective-C](https://developer.apple.com/library/ios/releasenotes/ObjectiveC/ModernizationObjC/AdoptingModernObjective-C/AdoptingModernObjective-C.html) 一文：
 
-```objective-c
+```
 // 定义一个枚举
 typedef NS_ENUM(NSInteger, NSMatrixMode) {
     NSRadioModeMatrix,
@@ -691,7 +678,7 @@ typedef NS_ENUM(NSInteger, NSMatrixMode) {
 
 定义 bit map：
 
-```objective-c
+```
 typedef NS_OPTIONS(NSUInteger, NSWindowMask) {
     NSBorderlessWindowMask      = 0,
     NSTitledWindowMask          = 1 << 0,
@@ -703,13 +690,13 @@ typedef NS_OPTIONS(NSUInteger, NSWindowMask) {
 
 使用 `const` 定义浮点型或者单个的整数型常量，如果要定义一组相关的整数常量，应该优先使用枚举。常量的命名规范和函数相同：
 
-```objective-c
+```
 const float NSLightGray;
 ```
 
 不要使用`#define`宏来定义常量，如果是整型常量，尽量使用枚举，浮点型常量，使用`const`定义。`#define`通常用来给编译器决定是否编译某块代码，比如常用的：
 
-```objective-c
+```
 #ifdef DEBUG
 ```
 
@@ -721,9 +708,9 @@ const float NSLightGray;
 	
 	[触发通知的类名] + [Did | Will] + [动作] + Notification
 
-栗子：
+例子：
 
-```objective-c
+```
 NSApplicationDidBecomeActiveNotification
 NSWindowDidMiniaturizeNotification
 NSTextViewDidChangeSelectionNotification
@@ -744,9 +731,9 @@ NSColorPanelColorDidChangeNotification
 - 版权信息
 - 文件包含的内容，作用
 
-一段良好文件注释的栗子：
+一段良好文件注释的例子：
 
-```objective-c
+```
 /*******************************************************************************
 	Copyright (C), 2011-2013, Andrew Min Chang
 
@@ -799,7 +786,7 @@ Xcode自带注释快捷键：`option` + `command` + `/`。
 
 一些良好的注释：
 
-```objective-c
+```
 
 /**
  *  Create a new preconnector to replace the old one with given mac address.
@@ -826,7 +813,7 @@ Xcode自带注释快捷键：`option` + `command` + `/`。
 
 协议、委托的注释要明确说明其被触发的条件：
 
-```objective-c
+```
 /** Sent when failed to init connection, like p2p failed. */
 -(void)initConnectionDidFailed:(IPCConnectHandler *)handler;
 ```
@@ -839,9 +826,9 @@ Xcode自带注释快捷键：`option` + `command` + `/`。
 
 在方法较多的源文件中，使用 `#pragma mark` 标记符来为不同功能的代码进行分块：
 
-```objective-c
+```
 // 一个使用 #pragma mark 进行分块的源文件代码结构
-@implementation XRVideoPlayerViewController
+@implementation DSVideoPlayerViewController
 
 #pragma mark - Public
 
@@ -862,7 +849,7 @@ Xcode自带注释快捷键：`option` + `command` + `/`。
 
 - (void)longPress:(UILongPressGestureRecognizer *)gesture {}
 
-#pragma mark - XRVideoPlayerControlDelegate
+#pragma mark - DSVideoPlayerControlDelegate
 
 - (void)controlDidPaused {}
 - (void)controlDidStarted {}
@@ -885,9 +872,10 @@ Xcode自带注释快捷键：`option` + `command` + `/`。
 @end
 ```
 
-### 不要使用 new 方法
+### 关于使用 new 方法
 
-尽管很多时候能用`new`代替`alloc init`方法，但这可能会导致调试内存时出现不可预料的问题。Cocoa的规范就是使用`alloc init`方法，使用`new`会让一些读者困惑。
+尽管很多时候能用`new`代替`alloc init`方法，但这可能会导致调试内存时出现不可预料的问题。Cocoa的规范就是使用`alloc init`方法。
+当然使用`new`会更简单一些。在没有自定义初始化方法的时候可以考虑使用 [Object new] 这个的构造方法。在使用自定义函数的时候就必须使用 alloc init的形式。这样的做法也是为了和Swift的编码风格一致。
 
 ### Public API 要尽量简洁
 
@@ -900,9 +888,9 @@ Xcode自带注释快捷键：`option` + `command` + `/`。
 - 当引用的是一个 Objective-C 或者 Objective-C++ 的头文件时，使用`#import`
 - 当引用的是一个 C 或者 C++ 的头文件时，使用 `#include`，这时必须要保证被引用的文件提供了保护域（#define guard）。
 
-栗子：
+例子：
 
-```objective-c
+```
 #import <Cocoa/Cocoa.h>
 #include <CoreFoundation/CoreFoundation.h>
 #import "GTMFoo.h"
@@ -915,7 +903,7 @@ Xcode自带注释快捷键：`option` + `command` + `/`。
 
 上面提到过，每一个框架都会有一个和框架同名的头文件，它包含了框架内接口的所有引用，在使用框架的时候，应该直接引用这个根头文件，而不是其它子模块的头文件，即使是你只用到了其中的一小部分，编译器会自动完成优化的。
 
-```objective-c
+```
 // 正确，引用根头文件
 #import <Foundation/Foundation.h>
 
@@ -928,7 +916,7 @@ Xcode自带注释快捷键：`option` + `command` + `/`。
 
 BOOL 在 Objective-C 中被定义为 `signed char` 类型，这意味着一个 BOOL 类型的变量不仅仅可以表示 `YES`(1) 和 `NO`(0) 两个值，所以永远**不要**将 BOOL 类型变量直接和 `YES` 比较：
 
-```objective-c
+```
 // 错误，无法确定|great|的值是否是YES(1)，不要将BOOL值直接与YES比较
 BOOL great = [foo isGreat];
 if (great == YES)
@@ -942,7 +930,7 @@ if (great)
 
 同样的，也不要将其它类型的值作为 BOOL 来返回，这种情况下，BOOL 变量只会取值的最后一个字节来赋值，这样很可能会取到0（NO）。但是，一些逻辑操作符比如 `&&`,`||`,`!`的返回是可以直接赋给 BOOL 的：
 
-```objective-c
+```
 // 错误，不要将其它类型转化为BOOL返回
 - (BOOL)isBold {
   return [self fontTraits] & NSFontBoldTrait;
@@ -967,15 +955,11 @@ if (great)
 
 另外BOOL类型可以和 `_Bool`,`bool` 相互转化，但是**不能**和 `Boolean` 转化。
 
-### 使用ARC
-
-除非想要兼容一些古董级的机器和操作系统，我们没有理由放弃使用ARC。在最新版的Xcode中，ARC是自动打开的，所以直接使用就好了。
-
 ### 在 init 和 dealloc 中不要用存取方法访问实例变量
 
 当 `init`、`dealloc` 方法被执行时，类的运行时环境不是处于正常状态的，使用存取方法访问变量可能会导致不可预料的结果，因此应当在这两个方法内直接访问实例变量。
 
-```objective-c
+```
 // 正确，直接访问实例变量
 - (instancetype)init {
   self = [super init];
@@ -1011,7 +995,7 @@ if (great)
 
 `NSString` 非常常用，在它被传递或者赋值时应当保证是以复制（copy）的方式进行的，这样可以防止在不知情的情况下 String 的值被其它对象修改。
 
-```objective-c
+```
 - (void)setFoo:(NSString *)aFoo {
   _foo = [aFoo copy];
 }
@@ -1021,7 +1005,7 @@ if (great)
 
 使用带有`@`符号的语法糖来生成 NSNumber 对象能使代码更简洁：
 
-```objective-c
+```
 NSNumber *fortyTwo = @42;
 NSNumber *piOverTwo = @(M_PI / 2);
 enum {
@@ -1036,7 +1020,7 @@ NSNumber *myEnum = @(kMyEnum);
 
 另外，不要使用诸如 `nil == Object` 或者 `Object == nil` 的形式来判断。
 
-```objective-c
+```
 // 正确，直接判断
 if (!objc) {
 	...	
@@ -1052,11 +1036,19 @@ if (nil == objc) {
 
 定义一个属性时，编译器会自动生成线程安全的存取方法（Atomic），但这样会大大降低性能，特别是对于那些需要频繁存取的属性来说，是极大的浪费。所以如果定义的属性不需要线程保护，记得手动添加属性关键字 `nonatomic` 来取消编译器的优化。
 
-### 点分语法的使用
+### 点语法的使用
 
-不要用点分语法来调用方法，只用来访问属性。这样是为了防止代码可读性问题。
+目前OC的语法某些函数开始支持点语法，比如单例
+以下两种表达形式都是可行。
 
-```objective-c
+```
+	NSUserDefaults.standardUserDefaults;
+	[NSUserDefaults standardUserDefaults];
+```
+
+同时要注意的是，OC更多的时候调用方法使用[]，点语法来访问属性。
+
+```
 // 正确，使用点分语法访问属性
 NSString *oldName = myObject.name;
 myObject.name = @"Alice";
@@ -1071,7 +1063,57 @@ array.release;
 
 一个类的 Delegate 对象通常还引用着类本身，这样很容易造成引用循环的问题，所以类的 Delegate 属性要设置为弱引用。
 
-```objective-c
+```
 /** delegate */
 @property (nonatomic, weak) id <IPCConnectHandlerDelegate> delegate;
 ```
+
+### 使用OC中定义的类型,而不要使用C语言中定义的类型
+这里主要说明的是数字类型。
+除非是特定的 API 库指定类型为 int/float，我们应该使用 NSUIntegers/NSIntegers/CGFloat。
+
+### 使用新风格的枚举
+一般枚举
+
+```
+typedef NS_ENUM(NSInteger, UITableViewCellStyle) {
+    UITableViewCellStyleDefault,
+    UITableViewCellStyleValue1,
+    UITableViewCellStyleValue2,
+    UITableViewCellStyleSubtitle
+};
+
+```
+
+位移枚举
+
+```
+typedef NS_OPTIONS(NSUInteger, UIViewAutoresizing) {
+    UIViewAutoresizingNone                = 0,
+    UIViewAutoresizingFlexibleLeftMargin  = 1 << 0,
+    UIViewAutoresizingFlexibleWidth        = 1 << 1,
+    UIViewAutoresizingFlexibleRightMargin  = 1 << 2,
+    UIViewAutoresizingFlexibleTopMargin    = 1 << 3,
+    UIViewAutoresizingFlexibleHeight      = 1 << 4,
+    UIViewAutoresizingFlexibleBottomMargin = 1 << 5
+};
+
+```
+
+### 避免头文件中不必要的引用
+如果可以的话，使用前向声明来代替头文件的引用，例如：@class DBFoo。
+
+### 有关于数组和字典包含的元素修饰
+除非数组和字典中保存的数据包含有多种类型，使用的时候尽量标明其元素类型，也有助于代码的上下文理解。
+这也是Swif中所倡导的。
+比如，说明数组中的元素都是按钮类型
+
+```
+@property (nonatomic, strong) NSMutableArray<UIButton *> *buttons;
+```
+再比如，一般情况从网络获取的JSON都是字符串和字符串的字典键值对，当然也有例外的情况
+
+```
+@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *dict;
+```
+
